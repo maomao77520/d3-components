@@ -168,17 +168,7 @@ Circle.prototype = {
 					return 'text-before-edge'
 				}
 			})
-			.attr('text-anchor', function () {
-				if (+me.data.position === 1 || +me.data.position === 4) {
-					return 'right'
-				}
-				else if (+me.data.position === 3 || +me.data.position === 6) {
-					return 'left'
-				}
-				else {
-					return 'middle'
-				}
-			})
+			.attr('text-anchor', 'middle')
 			.attr('fill', me.data.titleColor)
 			.attr('font-size', me.data.titleSize)
 			.attr('font-weight', function () {
@@ -187,7 +177,19 @@ Circle.prototype = {
                 }
                 return 600;
             })
-			.text(me.data.title);
+			.text(me.data.title)
+            .attr('x', function () {
+            	var box = d3.select(this).node().getBBox();
+            	if (me.data.position == 2 || me.data.position == 5) {
+            		return 0;
+            	}
+            	else if (me.data.position == 1 || me.data.position == 4) {
+            		return box.width / 2;
+            	}
+            	else {
+            		return -box.width / 2;
+            	}
+            });
     },
 
     // 渲染边框

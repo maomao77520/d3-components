@@ -29,7 +29,7 @@ function Ring(svg) {
         textSize: 58,
         titleSize: 26,
         titlePadding: 0,
-        backgroundColor: '#fff',
+        backgroundColor: '#ccc',
         ringWidth: 30,
         textAnchor: 'middle',
         titleWeight: 1,
@@ -162,17 +162,7 @@ Ring.prototype = {
                     return 'text-before-edge'
                 }
             })
-            .attr('text-anchor', function () {
-                if (+me.data.position === 1 || +me.data.position === 4) {
-                    return 'right'
-                }
-                else if (+me.data.position === 3 || +me.data.position === 6) {
-                    return 'left'
-                }
-                else {
-                    return 'middle'
-                }
-            })
+            .attr('text-anchor', 'middle')
             .attr('fill', me.data.titleColor)
             .attr('font-size', me.data.titleSize)
             .attr('font-weight', function () {
@@ -181,7 +171,19 @@ Ring.prototype = {
                 }
                 return 600;
             })
-            .text(me.data.title);
+            .text(me.data.title)
+            .attr('x', function () {
+                var box = d3.select(this).node().getBBox();
+                if (me.data.position == 2 || me.data.position == 5) {
+                    return 0;
+                }
+                else if (me.data.position == 1 || me.data.position == 4) {
+                    return box.width / 2;
+                }
+                else {
+                    return -box.width / 2;
+                }
+            });
     },
 
     // 渲染边框
@@ -253,7 +255,6 @@ Ring.prototype = {
                 min = arr[i];
             }
         }
-
         this.data.radius = min - this.data.padding * 2 - this.data.margin * 2;
         if (this.data.borderType >= 1) {
             this.data.radius = this.data.radius - this.data.borderWidth * 2;
