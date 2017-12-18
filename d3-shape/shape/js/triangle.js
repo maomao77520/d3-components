@@ -75,13 +75,19 @@ Triangle.prototype = {
     },
 
 	getVertices: function () {
+        var bottomV = Math.atan(2*this.data.height/this.data.width);
+        var x1 = this.data.borderWidth / 2 / Math.sin(bottomV);
+        var x2 = this.data.borderWidth / 2 / Math.tan(bottomV);
+        var topV = Math.PI - 2 * bottomV;
+        var y = this.data.borderWidth / 2 / Math.sin(topV / 2);
 		this.data.top = Number(this.data.top);
 		this.data.left = Number(this.data.left);
 		this.data.borderWidth = Number(this.data.borderWidth) > 0 ? Number(this.data.borderWidth) : 0;
-        this.data.vertice1 = (this.data.width / 2 ) + ',' + (this.data.borderWidth );
-        this.data.vertice2 =  (this.data.borderWidth ) + ',' + (this.data.height - this.data.borderWidth / 2);
-        this.data.vertice3 = (this.data.width - this.data.borderWidth ) + ',' + (this.data.height - this.data.borderWidth / 2);
-	},
+        this.data.vertice1 = (this.data.width / 2 ) + ',' + y;
+        this.data.vertice2 =  (x1 + x2) + ',' + (this.data.height - this.data.borderWidth / 2);
+        this.data.vertice3 = (this.data.width - x1 - x2) + ',' + (this.data.height - this.data.borderWidth / 2);
+	    
+    },
 
 	render: function () {
 		var data = this.data;
