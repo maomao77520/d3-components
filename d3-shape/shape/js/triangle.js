@@ -79,8 +79,8 @@ Triangle.prototype = {
 		this.data.left = Number(this.data.left);
 		this.data.borderWidth = Number(this.data.borderWidth) > 0 ? Number(this.data.borderWidth) : 0;
         this.data.vertice1 = (this.data.width / 2 ) + ',' + (this.data.borderWidth );
-        this.data.vertice2 =  (this.data.borderWidth ) + ',' + (this.data.height - this.data.borderWidth );
-        this.data.vertice3 = (this.data.width - this.data.borderWidth ) + ',' + (this.data.height - this.data.borderWidth );
+        this.data.vertice2 =  (this.data.borderWidth ) + ',' + (this.data.height - this.data.borderWidth / 2);
+        this.data.vertice3 = (this.data.width - this.data.borderWidth ) + ',' + (this.data.height - this.data.borderWidth / 2);
 	},
 
 	render: function () {

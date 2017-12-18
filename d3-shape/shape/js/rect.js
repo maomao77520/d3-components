@@ -35,11 +35,11 @@ Rect.prototype = {
 		this.data.height = this.data.height || this.data.canvasHeight - this.data.padding * 2;
         this.data.borderWidth = Number(this.data.borderWidth) > 0 ? Number(this.data.borderWidth) : 0;
 		
-		this.data.top =this.data.top ? +this.data.top : +this.data.top + this.data.borderWidth / 2 + Number(this.data.padding);
-		this.data.left =this.data.left ? +this.data.left : +this.data.left + this.data.borderWidth / 2 + Number(this.data.padding);
+		this.data.top = this.data.top > 0 ? +this.data.top : +this.data.top + this.data.borderWidth / 2 + Number(this.data.padding);
+		this.data.left = this.data.left > 0 ? +this.data.left : +this.data.left + this.data.borderWidth / 2 + Number(this.data.padding);
 
-		this.data.width = +this.data.width + this.data.borderWidth <= this.data.canvasWidth ? +this.data.width : this.data.width - this.data.borderWidth;
-		this.data.height = +this.data.height + this.data.borderWidth <= this.data.canvasHeight ? +this.data.height : this.data.height - this.data.borderWidth;
+		this.data.width = +this.data.width + this.data.borderWidth <= this.data.canvasWidth ? +this.data.width : this.data.canvasWidth - this.data.borderWidth;
+		this.data.height = +this.data.height + this.data.borderWidth <= this.data.canvasHeight ? +this.data.height : this.data.canvasHeight - this.data.borderWidth;
 
 		this.data.oriWidth = this.data.width;
         this.data.oriHeight = this.data.height;
