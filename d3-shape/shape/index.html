@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="../assets/d3.v4.js"></script>
+
+    <style type="text/css">
+        input, select {
+            display: inline-block;
+            margin: 5px;
+            width: 110px;
+            height: 30px;
+            line-height: 30px;
+        }
+        .panel {
+            float: right;
+            margin-right: 20px;
+            width: 450px;
+        }
+        .block {
+            float: left;
+        }
+        #content-wrap  {
+            display: inline-block;
+        }
+        button {
+            display: block;
+        }
+        label {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+    <div class="panel">
+        <div class="block">
+
+            <label>形状选择</label>
+            <select name="isShowTitle" class="shape-select">
+                 <option value="">形状选择</option>
+                 <option value="rect">方形</option>  
+                 <option value="ellipse">圆形</option>  
+                 <option value="triangle">三角形</option>  
+            </select>
+            <br/>
+            <label>圆角</label>
+            <input placeholder="圆角" name="borderRadius"></input>
+            <br/>
+            <label>边框宽度</label>
+            <input placeholder="边框宽度" name="borderWidth"></input>
+            <br/>
+            <label>边框颜色</label>
+            <input placeholder="边框颜色" name="borderColor"></input>
+            <br/>
+            <label>填充颜色</label>
+            <input placeholder="填充颜色" name="fillColor"></input>
+            <br/>
+            <label>转向</label>
+            <input placeholder="旋转角度" name="rotate"></input>
+            <!-- <select name="rotate">
+                 <option value="">转向</option>
+                 <option value="0">0</option>  
+                 <option value="-90">-90</option>  
+                 <option value="90">90</option>  
+                 <option value="180">180</option>  
+            </select> -->
+            <br/>
+            
+           
+             
+        </div>
+        <div class="block">
+            <label>组件标题</label>
+            <input placeholder="组件标题" name="title"></input>
+            <br/>
+            <label>链接</label>
+            <input placeholder="链接" name="url"></input>
+            <br/>
+            <label>宽度</label>
+            <input placeholder="宽度" name="width"></input>
+            <br/>
+            <label>高度</label>
+            <input placeholder="高度" name="height"></input>
+            <br/>
+
+            <label>x坐标</label>
+            <input placeholder="x坐标" name="left"></input>
+            <br/>
+            <label>y坐标</label>
+            <input placeholder="y坐标" name="top"></input>
+            <br/>
+
+            <label>内边距</label>
+            <input placeholder="内边距" name="padding"></input>
+            <br/>
+
+        </div>
+        <button id="submitBtn">确定</button>
+    </div>
+<body>
+
+<script src="./js/rect.js"></script>
+<script src="./js/ellipse.js"></script>
+<script src="./js/triangle.js"></script>
+
+
+<script src="../assets/jquery.min.js"></script>
+<script type="text/javascript">
+    
+    var width = 400;
+    var height = 300;
+
+    var svg = d3.select('body').append('svg')
+        .attr("width", width)
+        .attr("height", height)
+        .style("background", "rgba(255,255,255, 0.2)")
+        .style("box-shadow", "inset 0 0 3px 0px #CECECE")
+        .attr("transform", "translate(0,0)");
+    
+    var rectParams = {
+        canvasWidth: width,
+        canvasHeight: height
+    };
+    var ellipseParams = {
+        canvasWidth: width,
+        canvasHeight: height
+    };
+    var triangleParams = {
+        canvasWidth: width,
+        canvasHeight: height
+    };
+    var rect, ellipse, triangle, shape;
+    $('#submitBtn').on('click', function (e) {
+        shape = $('.shape-select').val();
+        
+        if (shape == 'rect') {
+            $('input').each(function (index, item) {
+                if ($(item).val() !== '') {
+                    rectParams[$(item).attr('name')] = $(item).val()
+                }
+            });
+            $('select').each(function (index, item) {
+                if ($(item).val() !== '') {
+                    rectParams[$(item).attr('name')] = $(item).val()
+                }
+            });
+            rect = new Rect(svg);
+            rect.init(rectParams);
+            console.log(rectParams)
+            for (var o in rectParams) {
+                $('input[name=' + o + ']').val(rectParams[o])
+            }
+        }
+        else if (shape == 'ellipse') {
+            $('input').each(function (index, item) {
+                if ($(item).val() !== '') {
+                    ellipseParams[$(item).attr('name')] = $(item).val()
+                }
+            });
+            $('select').each(function (index, item) {
+                if ($(item).val() !== '') {
+                    ellipseParams[$(item).attr('name')] = $(item).val()
+                }
+            });
+            ellipse = new Ellipse(svg);
+            ellipse.init(ellipseParams)
+            for (var o in ellipseParams) {
+                $('input[name=' + o + ']').val(ellipseParams[o])
+            }
+        }
+        else if (shape == 'triangle') {
+            $('input').each(function (index, item) {
+                if ($(item).val() !== '') {
+                    triangleParams[$(item).attr('name')] = $(item).val()
+                }
+            });
+            $('select').each(function (index, item) {
+                if ($(item).val() !== '') {
+                    triangleParams[$(item).attr('name')] = $(item).val()
+                }
+            });
+            triangle = new Triangle(svg);
+            triangle.init(triangleParams);
+            console.log(triangleParams)
+            for (var o in triangleParams) {
+                $('input[name=' + o + ']').val(triangleParams[o])
+            }
+        }
+
+    });
+
+
+    // 这里是我自己模拟的拖拽缩放，应该是在平台层实现的
+    svg.on('mousedown', function () {
+        startX = d3.event.pageX;
+        startY = d3.event.pageY;
+        var diffW;
+        var diffH;
+        var bgWidth = width;
+        var bgHeight = height;
+        svg.on('mousemove', function () {
+            diff = d3.event.pageX - startX > d3.event.pageY - startY
+                 ? d3.event.pageX - startX
+                 : d3.event.pageY - startY;
+            diffW = d3.event.pageX - startX;
+            diffH = d3.event.pageY - startY;
+            d3.select(this)
+                 .attr('width', bgWidth + diffW)
+                 .attr('height', bgHeight + diffH)
+
+            if (shape == 'triangle') {
+                triangle.data.canvasWidth = bgWidth + diffW > 0 ? bgWidth + diffW : 0;
+                triangle.data.canvasHeight = bgHeight + diffH > 0 ? bgHeight + diffH : 0;
+
+                // 拖拽改变属性，重新渲染
+                triangle.update(triangle.data);
+
+                for (var o in triangleParams) {
+                    $('input[name=' + o + ']').val(triangleParams[o])
+                }
+            }
+            
+            else if (shape == 'rect'){
+                rect.data.canvasWidth = bgWidth + diffW > 0 ? bgWidth + diffW : 0;
+                rect.data.canvasHeight = bgHeight + diffH > 0 ? bgHeight + diffH : 0;
+                rect.update(rect.data);
+
+                for (var o in rectParams) {
+                    $('input[name=' + o + ']').val(rectParams[o])
+                }
+            }
+            else {
+                ellipse.data.canvasWidth = bgWidth + diffW > 0 ? bgWidth + diffW : 0;
+                ellipse.data.canvasHeight = bgHeight + diffH > 0 ? bgHeight + diffH : 0;
+                ellipse.update(ellipse.data);
+
+                for (var o in ellipseParams) {
+                    $('input[name=' + o + ']').val(ellipseParams[o])
+                }
+            }
+            
+
+        })
+    })
+
+    svg.on('mouseup', function () {
+        svg.on('mousemove', null);
+    });
+    $('html').on('mouseup', function () {
+        svg.on('mousemove', null);
+    });
+
+
+    
+    
+</script>
+
+
+</body>
+</html>

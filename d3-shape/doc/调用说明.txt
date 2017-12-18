@@ -1,0 +1,12 @@
+方式一 （demo见index.html）
+1. 引入rect.js, ellipse.js, triangle.js三个js文件；
+2. 新建方形：rect = new Rect(svg), rect.init(params),rect.update(params)
+   新建圆形：ellipse = new Ellipse(svg), ellipse.init(params), ellipse.update(params)
+   新建三角形：trangle = new Triangle(svg), triangle.init(params), triangle.update(params)
+
+方式二 （demo见index-obj.html）
+1. 引入index.js, rect.js, ellipse.js, triangle.js四个js文件；
+2. 创建对象：var shapeObj = new CreateBaseShape(shape, svg);
+3. 初始化：shapeObj.init(params)
+4. 拖拽处理： shapeObj.update(params)
+5. 注意：shapeObj.init(params)传入的params会初始化shapeObj的各个属性，所以改变形状时请清空params再传入对应形状的参数，否则上一个形状的参数会继续挂载在shapeObj对象上并应用的新的形状的初始化中

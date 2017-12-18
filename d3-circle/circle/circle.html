@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="../assets/d3.v4.js"></script>
+
+    <style type="text/css">
+        input, select {
+            display: inline-block;
+            margin: 5px;
+            width: 110px;
+            height: 30px;
+            line-height: 30px;
+        }
+        .panel {
+            float: right;
+            margin-right: 20px;
+            width: 450px;
+        }
+        .block {
+            float: left;
+        }
+        #content-wrap  {
+            display: inline-block;
+        }
+        button {
+            display: block;
+        }
+        label {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+    <div class="panel">
+        <div class="block">
+            <label>浅颜色</label>
+            <input placeholder="浅颜色" name="fillColor1"></input>
+            <br/>
+            <label>深颜色</label>
+            <input placeholder="深颜色" name="fillColor2"></input>
+            <br/>
+            <label>半径</label>
+    	    <input placeholder="半径" name="radius"></input>
+            <br/>
+            <label>光线x</label>
+            <input placeholder="光线x" name="lightCx"></input>
+            <br/>
+            <label>光线y</label>
+            <input placeholder="光线y" name="lightCy"></input>
+            <br/>
+            <label>是否显示标题</label>
+    	    <select name="isShowTitle">
+                 <option value="">请选择是否显示标题</option>
+                 <option value="1">是</option>  
+                 <option value="0">否</option>  
+            </select>
+            <br/>
+            <label>标题内容</label>
+            <input placeholder="标题内容" name="title"></input>
+            <br/>
+            <label>标题位置</label>
+            <select name="position">
+                <option value="">标题位置</option>
+                <option value="1">上左</option>
+                <option value="2">上中</option>
+                <option value="3">上右</option>
+                <option value="4">下左</option>
+                <option value="5">下中</option>
+                <option value="6">下右</option>
+            </select>
+            <br/>
+            <label>标题字体大小</label>
+            <input placeholder="标题字体大小" name="titleSize"></input>
+            <br/>
+            <label>标题字体粗细</label>
+            <select name="titleWeight">
+                <option value="">标题字体粗细</option>
+                <option value="1">正常</option>
+                <option value="2">加粗</option>
+            </select>
+            <br/>
+            <label>标题字体颜色</label>
+            <input placeholder="标题字体颜色" name="titleColor"></input>
+            <br/>
+            <label>标题与图形距离</label>
+            <input placeholder="标题与图形距离" name="titlePadding"></input>
+            <br/>
+            <label>数值</label>
+            <input placeholder="数值" name="text"></input>
+            <br/>
+            <label>数值字体大小</label>
+            <input placeholder="数值字体大小" name="textSize"></input>
+            <br/>
+            <label>数值颜色</label>
+            <input placeholder="数值颜色" name="textColor"></input>
+            <br/>
+            <label>数值小数点</label>
+            <input placeholder="数值小数点" name="floatNum"></input>
+            <br/>
+             
+        </div>
+        <div class="block">
+            <label>链接视图</label>
+            <input placeholder="链接视图" name="url"></input> 
+            <br/>
+            <label>数值区段</label>
+            <input placeholder="格式如1-100;101-200" name="range"></input> 
+            <br/>
+            <label>区段颜色</label>
+            <input placeholder="格式如rgba(86, 197, 60, 0.8)-rgba(27, 117, 20, 1);rgba(250, 185, 56, 0.8)-rgba(202, 94, 34, 1)" name="rangeColor"></input> 
+            <br/>
+            <label>边框类型</label>
+            <select name="borderType">
+                <option value="">边框类型</option>
+                <option value="0">无边框</option>
+                <option value="1">实线</option>
+                <option value="2">虚线</option>
+                <option value="3">点状线</option>
+            </select>
+            <br/>
+            <label>边框宽度</label>
+            <input placeholder="边框宽度" name="borderWidth"></input>
+            <br/>
+            <label>边框颜色</label>
+            <input placeholder="边框颜色" name="borderColor"></input>
+            <br/>
+            <label>背景颜色</label>
+            <input placeholder="背景颜色" name="backgroundColor"></input>
+            <br/>
+            <label>高度</label>
+            <input placeholder="高度" name="height" id="height"></input>
+            <br/>
+            <label>宽度</label>
+            <input placeholder="宽度" name="width" id="width"></input>
+            <br/>
+            <label>x坐标</label>
+            <input placeholder="x坐标" name="left"></input>
+            <br/>
+            <label>y坐标</label>
+            <input placeholder="y坐标" name="top"></input>
+            <br/>
+            <label>内边距</label>
+            <input placeholder="内边距" name="padding"></input>
+            <br/>
+            <label>外边距</label>
+            <input placeholder="外边距" name="margin"></input>
+        </div>
+        <button id="submitBtn">确定</button>
+    </div>
+
+
+
+<body>
+
+<script src="./js/circle.js"></script>
+
+
+<script src="../assets/jquery.min.js"></script>
+<script type="text/javascript">
+
+    var width = 200;
+    var height = 300;
+
+    var svg = d3.select('body').append('svg')
+        .attr("width", width)
+        .attr("height", height)
+        .style("background", "rgba(255,255,255, 0.2)")
+        .style("box-shadow", "inset 0 0 3px 0px #CECECE")
+        .attr("transform", "translate(0,0)");
+
+    var params = {
+        text: 100.99,
+        width: width,
+        height: height
+
+    };
+    
+    var circle = new Circle(svg);
+    circle.init(params);
+    
+    $('#submitBtn').on('click', function (e) {
+        $('input').each(function (index, item) {
+            if ($(item).attr('name') == 'range') {
+                var val = $(item).val();
+                var temp = val.split(';');
+                
+                params.range = [];
+                for (var i=0; i < temp.length; i++) {
+                    var r = [];
+                    r[0] = temp[i].split('-')[0];
+                    r[1] = temp[i].split('-')[1];
+                    params.range.push(r);
+                }
+            }
+
+            else if ($(item).attr('name') == 'rangeColor') {
+                var val = $(item).val();
+                var temp = val.split(';');
+                var r = [];
+                params.rangeColor = [];
+                for (var i=0; i < temp.length; i++) {
+                    var r = [];
+                    r[0] = temp[i].split('-')[0];
+                    r[1] = temp[i].split('-')[1];
+                    params.rangeColor.push(r);
+                }
+            }
+            else {
+                params[$(item).attr('name')] = $(item).val()
+
+            }
+        });
+        $('select').each(function (index, item) {
+            if ($(item).val() !== '') {
+                params[$(item).attr('name')] = $(item).val()
+            }
+        });
+
+        svg.attr('width', params.width).attr('height', params.height)
+        
+        circle.init(params);
+
+        for (var o in params) {
+            $('input[name=' + o + ']').val(params[o])
+            if (o == 'range') {
+                var temp = [];
+                for (var i in params.range) {
+                    params.range[i] = params.range[i].join('-');
+                }
+                params.range = params.range.join(';')
+                $('input[name=range]').val(params.range)
+            }
+            if (o == 'rangeColor') {
+                var temp = [];
+                for (var i in params.rangeColor) {
+                    params.rangeColor[i] = params.rangeColor[i].join('-');
+                }
+                params.rangeColor = params.rangeColor.join(';')
+                $('input[name=rangeColor]').val(params[o])
+            }
+        }
+
+    });
+
+    for (var o in circle.data) {
+        $('input[name=' + o + ']').val(circle.data[o])
+    }
+
+    // 这里是我自己模拟的拖拽缩放，应该是在平台层实现的
+    svg.on('mousedown', function () {
+        startX = d3.event.pageX;
+        startY = d3.event.pageY;
+        var diffW;
+        var diffH;
+        var bgWidth = width;
+        var bgHeight = height;
+        svg.on('mousemove', function () {
+            diff = d3.event.pageX - startX > d3.event.pageY - startY
+                 ? d3.event.pageX - startX
+                 : d3.event.pageY - startY;
+            diffW = d3.event.pageX - startX;
+            diffH = d3.event.pageY - startY;
+            d3.select(this)
+                 .attr('width', bgWidth + diffW)
+                 .attr('height', bgHeight + diffH)
+
+            circle.data.width = bgWidth + diffW > 0 ? bgWidth + diffW : 0;
+            circle.data.height = bgHeight + diffH > 0 ? bgHeight + diffH : 0;
+ 
+            // 拖拽改变属性，重新渲染
+            circle.update(circle.data)
+
+        })
+    })
+
+    svg.on('mouseup', function () {
+        svg.on('mousemove', null);
+        for (var o in params) {
+            $('input[name=' + o + ']').val(params[o])
+        }
+    });
+    $('html').on('mouseup', function () {
+        svg.on('mousemove', null);
+    })
+
+    
+</script>
+
+
+</body>
+</html>
