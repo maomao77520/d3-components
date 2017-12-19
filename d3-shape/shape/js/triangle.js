@@ -87,22 +87,36 @@ Triangle.prototype = {
         this.data.vertice2 =  (x1 + x2) + ',' + (this.data.height - this.data.borderWidth / 2);
         this.data.vertice3 = (this.data.width - x1 - x2) + ',' + (this.data.height - this.data.borderWidth / 2);
 	    
-    },
+        this.data.v1 = (this.data.width / 2 ) + ',' + y * 2;
+        this.data.v2 =  (x1 + x2)*2 + ',' + (this.data.height - this.data.borderWidth);
+        this.data.v3 = (this.data.width - x1*2 - x2*2) + ',' + (this.data.height - this.data.borderWidth );
+    },  
 
 	render: function () {
 		var data = this.data;
 		var me = this;
 		this.svg.select('g').remove();
-		var d = 'M ' + data.vertice1 + ' L ' + data.vertice2 + ' L ' +  data.vertice3 + ' Z';
-		var points = data.vertice1 + ' ' + data.vertice2 + ' ' +  data.vertice3;
+		var d1 = 'M ' + data.vertice1 + ' L ' + data.vertice2 + ' L ' +  data.vertice3 + ' Z';
+		var d2 = 'M ' + data.v1 + ' L ' + data.v2 + ' L ' +  data.v3 + ' Z';
         this.contentWrap = this.svg.append('svg:g')
             .attr('font-family', this.data.fontFamily)
             .attr('text-anchor', 'middle');
 
         this.triangle = this.contentWrap.append('path')
-            .attr('d', d)
+            .attr('d', d2)
             .attr('fill', data.fillColor)
+            .attr('transform', 'translate(' + data.translateX + ',' + data.translateY +') rotate(' + data.rotate + ')')
+            .on('click', function () {
+                if (me.data.url) {
+                    window.open(me.data.url);
+                }
+            });
+
+        this.border = this.contentWrap.append('path')
+            .attr('d', d1)
+            .attr('fill', 'transparent')
 		    .attr('stroke', data.borderColor)
+            .attr('stroke-opacity', data.borderOpacity)
 		    .attr('stroke-width', data.borderWidth) 
             .attr('transform', 'translate(' + data.translateX + ',' + data.translateY +') rotate(' + data.rotate + ')')
 		    .on('click', function () {
@@ -112,7 +126,7 @@ Triangle.prototype = {
             });
         
         if (data.borderRadius) {
-        	this.triangle.attr('stroke-linejoin', 'round');
+        	this.border.attr('stroke-linejoin', 'round');
         }
 		
 	}
