@@ -105,8 +105,24 @@ Rect.prototype = {
         this.rect = this.contentWrap.append('rect')
 		    .attr('width', data.width)
 		    .attr('height', data.height) 
-		    .attr('rx', data.borderRadius)
-		    .attr('ry', data.borderRadius)
+		    .attr('rx', function () {
+		    	if (data.borderWidth < 4) {
+		    		return data.borderRadius;
+		    	}
+		    	if (data.borderWidth > data.borderRadius) {
+		    		return 0;
+		    	}
+		    	return data.borderRadius / 2;
+		    })
+		    .attr('ry', function () {
+		    	if (data.borderWidth < 4) {
+		    		return data.borderRadius;
+		    	}
+		    	if (data.borderWidth > data.borderRadius) {
+		    		return 0;
+		    	}
+		    	return data.borderRadius / 2;
+		    })
 		    .attr('fill', data.fillColor)
 		    .attr('transform', 'translate(' + (data.translateX) + ',' + (data.translateY ) +') rotate(' + data.rotate + ')')    
 		    .on('click', function () {
