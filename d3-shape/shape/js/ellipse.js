@@ -20,6 +20,7 @@ function Ellipse(svg) {
 		fillColor: '#1dacfc',
 		borderWidth: 0,
 		borderColor: '#1dacfc',
+        borderOpacity: 1,
 		padding: 0
     };
 }
@@ -36,8 +37,8 @@ Ellipse.prototype = {
 		this.data.left = +this.data.left + Number(this.data.padding) || +this.data.left + this.data.width / 2 + Number(this.data.padding); 
         this.data.borderWidth = Number(this.data.borderWidth) > 0 ? Number(this.data.borderWidth) : 0;
         
-        this.data.width = +this.data.width + this.data.borderWidth <= this.data.canvasWidth ? this.data.width : this.data.width - this.data.borderWidth;
-        this.data.height = +this.data.height + this.data.borderWidth <= this.data.canvasHeight ? this.data.height : this.data.height - this.data.borderWidth;
+        this.data.width = +this.data.width + this.data.borderWidth <= this.data.canvasWidth ? this.data.width : this.data.width - 2*this.data.borderWidth;
+        this.data.height = +this.data.height + this.data.borderWidth <= this.data.canvasHeight ? this.data.height : this.data.height - 2*this.data.borderWidth;
 
         this.data.oriWidth = this.data.width;
         this.data.oriHeight = this.data.height;
@@ -62,17 +63,6 @@ Ellipse.prototype = {
         this.render();
     },
 
-    // 圆形的中心在图形中心，即本身有top和left值，旋转之后保持top和left即可
-    resetCenter: function () {
-    	var d = this.data;
-    	var temp = Math.PI / 2 - d.rotate*Math.PI/180 - Math.atan(d.height/d.width);
-    	var r = Math.sqrt(d.width/2 * d.width/2 + d.height/2 * d.height/2);
-    	var tempL = Math.sin(temp) * r;
-    	var tempT = Math.cos(temp) * r;
-    	this.data.translateX = d.width/2 - tempL;
-    	this.data.translateY = d.height / 2 -tempT;
-    },
-
 	render: function () {
 		var data = this.data;
 		var me = this;
@@ -85,10 +75,21 @@ Ellipse.prototype = {
 		    .attr('rx', data.width / 2)
 		    .attr('ry', data.height / 2)
 		    .attr('fill', data.fillColor)
-		    .attr('stroke', data.borderColor)
-		    .attr('stroke-width', data.borderWidth)
 		    .attr('transform', 'translate(' + data.left + ',' + data.top +') rotate(' + data.rotate + ')')	    
 		    .on('click', function () {
+                if (me.data.url) {
+                    window.open(me.data.url);
+                }
+            });
+        this.border = this.contentWrap.append('ellipse')
+            .attr('rx', data.width / 2 + data.borderWidth /2)
+            .attr('ry', data.height / 2 + data.borderWidth/2)
+            .attr('fill', 'transparent')
+            .attr('stroke', data.borderColor)
+            .attr('stroke-opacity', data.borderOpacity)
+            .attr('stroke-width', data.borderWidth)
+            .attr('transform', 'translate(' + data.left + ',' + data.top +') rotate(' + data.rotate + ')')      
+            .on('click', function () {
                 if (me.data.url) {
                     window.open(me.data.url);
                 }
