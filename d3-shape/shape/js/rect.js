@@ -35,11 +35,11 @@ Rect.prototype = {
 		this.data.height = this.data.height || this.data.canvasHeight - this.data.padding * 2;
         this.data.borderWidth = Number(this.data.borderWidth) > 0 ? Number(this.data.borderWidth) : 0;
 		
-		this.data.top = this.data.top > 0 ? +this.data.top: +this.data.top + this.data.borderWidth + Number(this.data.padding);
-		this.data.left = this.data.left > 0 ? +this.data.left : +this.data.left + this.data.borderWidth + Number(this.data.padding);
+		// this.data.top = this.data.top > 0 ? +this.data.top: +this.data.top + this.data.borderWidth + Number(this.data.padding);
+		// this.data.left = this.data.left > 0 ? +this.data.left : +this.data.left + this.data.borderWidth + Number(this.data.padding);
 
-		this.data.width = +this.data.width + this.data.borderWidth <= this.data.canvasWidth ? +this.data.width : this.data.canvasWidth - this.data.borderWidth * 2;
-		this.data.height = +this.data.height + this.data.borderWidth <= this.data.canvasHeight ? +this.data.height : this.data.canvasHeight - this.data.borderWidth * 2;
+		// this.data.width = +this.data.width + this.data.borderWidth <= this.data.canvasWidth ? +this.data.width : this.data.canvasWidth - this.data.borderWidth * 2;
+		// this.data.height = +this.data.height + this.data.borderWidth <= this.data.canvasHeight ? +this.data.height : this.data.canvasHeight - this.data.borderWidth * 2;
 
 		this.data.oriWidth = this.data.width;
         this.data.oriHeight = this.data.height;
@@ -49,8 +49,6 @@ Rect.prototype = {
         if (+this.data.rotate == 0) {
         	this.data.translateX = this.data.left;
         	this.data.translateY = this.data.top;
-        	this.data.translateXB = this.data.left - this.data.borderWidth /2;
-        	this.data.translateYB = this.data.top - this.data.borderWidth / 2;
         }
         else {
         	this.resetCenter();
@@ -81,16 +79,6 @@ Rect.prototype = {
     	this.data.translateX = +this.data.left + d.width/2 - tempL;
     	this.data.translateY = +this.data.top + d.height / 2 -tempT;
 
-        var widthB = d.width + d.borderWidth;
-        var heightB = d.height + d.borderWidth;
-        var tempB = Math.PI/2 - d.rotate*Math.PI/180 - Math.atan(heightB/widthB);
-        var rB = Math.sqrt((widthB/2) * (widthB/2) + (heightB/2) * (heightB/2));
-        var tempLB = Math.sin(tempB) * rB;
-        var tempTB = Math.cos(tempB) * rB;
-
-        this.data.translateXB = +this.data.left + widthB/2 - tempLB - this.data.borderWidth / 2;
-    	this.data.translateYB = +this.data.top + heightB/2 - tempTB - this.data.borderWidth / 2;
-
     },
 
 	render: function () {
@@ -102,27 +90,27 @@ Rect.prototype = {
             .attr('font-family', this.data.fontFamily)
             .attr('text-anchor', 'middle');
         
-        this.rect = this.contentWrap.append('rect')
+
+        this.border = this.contentWrap.append('rect')
 		    .attr('width', data.width)
 		    .attr('height', data.height) 
-		    .attr('rx', function () {
-		    	if (data.borderWidth < 4) {
-		    		return data.borderRadius;
-		    	}
-		    	if (data.borderWidth > data.borderRadius) {
-		    		return 0;
-		    	}
-		    	return data.borderRadius / 2;
-		    })
-		    .attr('ry', function () {
-		    	if (data.borderWidth < 4) {
-		    		return data.borderRadius;
-		    	}
-		    	if (data.borderWidth > data.borderRadius) {
-		    		return 0;
-		    	}
-		    	return data.borderRadius / 2;
-		    })
+		    .attr('rx', data.borderRadius)
+		    .attr('ry', data.borderRadius)
+		    .attr('fill', data.borderColor)
+		    .attr('transform', 'translate(' + (data.translateX) + ',' + (data.translateY) +') rotate(' + data.rotate + ')')    
+		    .on('click', function () {
+                if (me.data.url) {
+                    window.open(me.data.url);
+                }
+            });
+
+        this.rect = this.contentWrap.append('rect')
+		    .attr('width', data.width - data.borderWidth*2)
+		    .attr('height', data.height - data.borderWidth*2) 
+		    .attr('rx', data.borderRadius)
+		    .attr('ry', data.borderRadius)
+		    .attr('x', data.borderWidth)
+		    .attr('y', data.borderWidth)
 		    .attr('fill', data.fillColor)
 		    .attr('transform', 'translate(' + (data.translateX) + ',' + (data.translateY ) +') rotate(' + data.rotate + ')')    
 		    .on('click', function () {
@@ -131,21 +119,7 @@ Rect.prototype = {
                 }
             });
 
-         this.border = this.contentWrap.append('rect')
-		    .attr('width', +data.width + data.borderWidth)
-		    .attr('height', +data.height + data.borderWidth) 
-		    .attr('rx', data.borderRadius)
-		    .attr('ry', data.borderRadius)
-		    .attr('fill', 'transparent')
-		    .attr('stroke', data.borderColor)
-		    .attr('stroke-width', data.borderWidth)
-		    .attr('stroke-opacity', data.borderOpacity)
-		    .attr('transform', 'translate(' + (data.translateXB) + ',' + (data.translateYB) +') rotate(' + data.rotate + ')')    
-		    .on('click', function () {
-                if (me.data.url) {
-                    window.open(me.data.url);
-                }
-            });
+         
 		
 	}
 };
